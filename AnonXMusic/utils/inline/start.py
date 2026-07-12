@@ -32,7 +32,8 @@ def private_panel(_):
         [
             InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_CHAT),
         ],
-        [InlineKeyboardButton(text="• sᴏᴜʀᴄᴇ ᴄᴏᴅᴇ •", url=f"https://github.com/xbitcode/music.git")],
+        [InlineKeyboardButton(text="\u2615 ʙᴜʏ ᴍᴇ ᴀ ᴄᴏꜰꜰᴇᴇ \u2615", url="https://upi.me/pay?pa=opharsh@upi&pn=Harsh&am=10&cu=INR&tn=Support%20MusicBot")],
+        [InlineKeyboardButton(text="\u2022 s\u1d0f\u1d1c\u0280\u1d04\u1d07 \u1d04\u1d0f\u1d05\u1d07 \u2022", url="https://github.com/Op-harsh/MusicBot")],
     
     ]
     
