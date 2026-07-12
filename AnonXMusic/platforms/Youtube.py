@@ -1,4 +1,5 @@
 import asyncio
+import base64
 import glob
 import os
 import random
@@ -13,6 +14,25 @@ from AnonXMusic import LOGGER
 from AnonXMusic.utils.formatters import time_to_seconds
 
 logger = LOGGER(__name__)
+
+
+def setup_cookies():
+    """Create cookies file from COOKIES_DATA environment variable (base64 encoded)."""
+    cookies_data = os.environ.get("COOKIES_DATA")
+    if cookies_data:
+        os.makedirs("cookies", exist_ok=True)
+        cookie_path = os.path.join("cookies", "youtube_cookies.txt")
+        try:
+            decoded = base64.b64decode(cookies_data)
+            with open(cookie_path, "wb") as f:
+                f.write(decoded)
+            logger.info("Cookies file created from COOKIES_DATA env variable")
+        except Exception as e:
+            logger.error(f"Failed to decode cookies: {e}")
+
+
+# Auto-setup cookies when module loads
+setup_cookies()
 
 
 def cookie_txt_file():
