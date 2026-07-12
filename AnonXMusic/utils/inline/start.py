@@ -12,6 +12,9 @@ def start_panel(_):
             ),
             InlineKeyboardButton(text=_["S_B_2"], url=config.SUPPORT_CHAT),
         ],
+        [
+            InlineKeyboardButton(text="\u2615 ʙᴜʏ ᴍᴇ ᴀ ᴄᴏꜰꜰᴇᴇ \u2615", url="https://upi.me/pay?pa=opharsh@upi&pn=Harsh&am=10&cu=INR&tn=Support%20MusicBot"),
+        ],
     ]
     return buttons
 
