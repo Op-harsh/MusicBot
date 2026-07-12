@@ -65,11 +65,6 @@ class YouTubeAPI:
             "no_warnings": True,
             "geo_bypass": True,
             "nocheckcertificate": True,
-            "extractor_args": {
-                "youtube": {
-                    "player_client": ["android_creator", "mediaconnect"],
-                }
-            },
         }
         cookie = cookie_txt_file()
         if cookie:
