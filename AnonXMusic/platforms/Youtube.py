@@ -45,6 +45,11 @@ class YouTubeAPI:
             "no_warnings": True,
             "geo_bypass": True,
             "nocheckcertificate": True,
+            "extractor_args": {
+                "youtube": {
+                    "player_client": ["android_creator", "mediaconnect"],
+                }
+            },
         }
         cookie = cookie_txt_file()
         if cookie:
@@ -399,6 +404,11 @@ class YouTubeAPI:
                 "retries": 3,
                 "fragment_retries": 3,
                 "socket_timeout": 30,
+                "extractor_args": {
+                    "youtube": {
+                        "player_client": ["android_creator", "mediaconnect"],
+                    }
+                },
             }
             if is_audio:
                 opts["postprocessors"] = [
