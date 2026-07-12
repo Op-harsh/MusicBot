@@ -8,7 +8,7 @@ from pyrogram.enums import ChatType
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from pyrogram.errors.exceptions.not_acceptable_406 import ChannelPrivate
 from pyrogram.errors.exceptions.flood_420 import SlowmodeWait
-from ytSearch import VideosSearch
+from AnonXMusic import YouTube
 
 import config
 from AnonXMusic import app
@@ -38,7 +38,7 @@ async def start_pm(client, message: Message, _):
         name = message.text.split(None, 1)[1]
         if name[0:4] == "help":
             keyboard = help_pannel(_)
-            await message.reply_sticker("CAACAgUAAx0CdQO5IgACMTplUFOpwDjf-UC7pqVt9uG659qxWQACfQkAAghYGFVtSkRZ5FZQXDME")
+
             return await message.reply_photo(
                 photo=random.choice(config.START_IMG_URL),
                 caption=_["help_1"].format(config.SUPPORT_CHAT),
@@ -53,45 +53,46 @@ async def start_pm(client, message: Message, _):
                 )
             return
         if name[0:3] == "inf":
-            m = await message.reply_text("🔎")
+            m = await message.reply_text("\U0001f50e")
             query = (str(name)).replace("info_", "", 1)
-            query = f"https://www.youtube.com/watch?v={query}"
-            results = VideosSearch(query, limit=1)
-            for result in (await results.next())["result"]:
-                title = result["title"]
-                duration = result["duration"]
-                views = result["viewCount"]["short"]
-                thumbnail = result["thumbnails"][0]["url"].split("?")[0]
-                channellink = result["channel"]["link"]
-                channel = result["channel"]["name"]
-                link = result["link"]
-                published = result["publishedTime"]
-            searched_text = _["start_6"].format(
-                title, duration, views, published, channellink, channel, app.mention
-            )
-            key = InlineKeyboardMarkup(
-                [
+            try:
+                title, duration, duration_sec, thumbnail, vidid = await YouTube.details(
+                    query, videoid=True
+                )
+                link = f"https://www.youtube.com/watch?v={query}"
+                info = await YouTube._extract_info(link)
+                views = info.get("view_count", 0)
+                views_short = f"{views:,}" if views else "N/A"
+                channel = info.get("uploader", "Unknown")
+                channellink = info.get("uploader_url", link)
+                published = info.get("upload_date", "Unknown")
+                searched_text = _["start_6"].format(
+                    title, duration, views_short, published, channellink, channel, app.mention
+                )
+                key = InlineKeyboardMarkup(
                     [
-                        InlineKeyboardButton(text=_["S_B_8"], url=link),
-                        InlineKeyboardButton(text=_["S_B_9"], url=config.SUPPORT_CHAT),
-                    ],
-                ]
-            )
-            await m.delete()
-            await app.send_photo(
-                chat_id=message.chat.id,
-                photo=thumbnail,
-                caption=searched_text,
-                reply_markup=key,
-            )
+                        [
+                            InlineKeyboardButton(text=_["S_B_8"], url=link),
+                            InlineKeyboardButton(text=_["S_B_9"], url=config.SUPPORT_CHAT),
+                        ],
+                    ]
+                )
+                await m.delete()
+                await app.send_photo(
+                    chat_id=message.chat.id,
+                    photo=thumbnail,
+                    caption=searched_text,
+                    reply_markup=key,
+                )
+            except Exception as e:
+                await m.edit_text(f"\u274c Error: `{e}`")
             if await is_on_off(2):
                 return await app.send_message(
                     chat_id=config.LOGGER_ID,
-                    text=f"{message.from_user.mention} ᴊᴜsᴛ sᴛᴀʀᴛᴇᴅ ᴛʜᴇ ʙᴏᴛ ᴛᴏ ᴄʜᴇᴄᴋ <b>ᴛʀᴀᴄᴋ ɪɴғᴏʀᴍᴀᴛɪᴏɴ</b>.\n\n<b>ᴜsᴇʀ ɪᴅ :</b> <code>{message.from_user.id}</code>\n<b>ᴜsᴇʀɴᴀᴍᴇ :</b> @{message.from_user.username}",
+                    text=f"{message.from_user.mention} \u1d0a\u1d1cs\u1d1b s\u1d1b\u1d00\u0280\u1d1b\u1d07\u1d05 \u1d1b\u029c\u1d07 \u0299\u1d0f\u1d1b \u1d1b\u1d0f \u1d04\u029c\u1d07\u1d04\u1d0b <b>\u1d1b\u0280\u1d00\u1d04\u1d0b \u026a\u0274\u0493\u1d0f\u0280\u1d0d\u1d00\u1d1b\u026a\u1d0f\u0274</b>.\n\n<b>\u1d1cs\u1d07\u0280 \u026a\u1d05 :</b> <code>{message.from_user.id}</code>\n<b>\u1d1cs\u1d07\u0280\u0274\u1d00\u1d0d\u1d07 :</b> @{message.from_user.username}",
                 )
     else:
         out = private_panel(_)
-        await message.reply_sticker("CAACAgUAAx0CdQO5IgACMTplUFOpwDjf-UC7pqVt9uG659qxWQACfQkAAghYGFVtSkRZ5FZQXDME")
         await message.reply_photo(
             photo=random.choice(config.START_IMG_URL),
             caption=_["start_2"].format(message.from_user.mention, app.mention),
